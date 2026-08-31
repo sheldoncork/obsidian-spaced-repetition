@@ -61,15 +61,7 @@ export function createSRCommentHiderExtension(isEnabled: () => boolean) {
                         (range) => range.from <= line.to && range.to >= line.from,
                     );
 
-                    if (isLineActive) {
-                        builder.add(
-                            start,
-                            end,
-                            Decoration.mark({
-                                class: "sr-comment-faint",
-                            }),
-                        );
-                    } else {
+                    if (!isLineActive) {
                         builder.add(
                             start,
                             end,
