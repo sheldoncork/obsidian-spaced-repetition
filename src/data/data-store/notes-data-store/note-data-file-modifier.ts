@@ -1,6 +1,10 @@
 import { Notice, TFile, Vault } from "obsidian";
 
-import { SR_COMMENT_AND_WHITESPACE_FINDER, SR_METADATA_CALLOUT } from "src/data/constants";
+import {
+    MARKDOWN_BLOCK_START_REGEX,
+    SR_COMMENT_AND_WHITESPACE_FINDER,
+    SR_METADATA_CALLOUT,
+} from "src/data/constants";
 import { StorageType } from "src/data/data-store/base/data-store";
 import { IFileModifier as IFileModifier } from "src/data/data-store/base/file-modifier";
 import { t } from "src/lang/helpers";
@@ -48,6 +52,16 @@ export class NoteDataFileModifier implements IFileModifier {
                         const needsLeadingNewline =
                             match.index !== 0 && data[match.index - 1] !== "\n";
                         newText = `${needsLeadingNewline ? "\n" : ""}${indent}${SR_METADATA_CALLOUT}\n${indent}> ${commentStr}`;
+                    }
+
+                    const after = data.substring(match.index + match[0].length);
+                    const nextLineMatch = after.match(/^\r?\n([^\r\n]+)/);
+                    if (
+                        nextLineMatch &&
+                        nextLineMatch[1].trim().length > 0 &&
+                        !nextLineMatch[1].match(MARKDOWN_BLOCK_START_REGEX)
+                    ) {
+                        newText += "\n";
                     }
 
                     if (match.index > index) {

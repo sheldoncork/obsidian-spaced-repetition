@@ -1,4 +1,5 @@
 import {
+    MARKDOWN_BLOCK_START_REGEX,
     OBSIDIAN_BLOCK_ID_ENDOFLINE_REGEX,
     OBSIDIAN_TAG_AT_STARTOFLINE_REGEX,
     SR_METADATA_CALLOUT as SR_METADATA_CALLOUT,
@@ -284,7 +285,26 @@ export class Question {
         //      1. the topic path (if present),
         //      2. the question text
         //      3. the schedule HTML comment (if present)
-        const replacementText = this.formatForNote(settings);
+        let replacementText = this.formatForNote(settings);
+
+        if (
+            settings.useCalloutsForSchedulingComments &&
+            !originalText.includes(SR_METADATA_CALLOUT) &&
+            replacementText.includes(SR_METADATA_CALLOUT)
+        ) {
+            const idx = noteText.indexOf(originalText);
+            if (idx !== -1) {
+                const after = noteText.substring(idx + originalText.length);
+                const nextLineMatch = after.match(/^\r?\n([^\r\n]+)/);
+                if (
+                    nextLineMatch &&
+                    nextLineMatch[1].trim().length > 0 &&
+                    !nextLineMatch[1].match(MARKDOWN_BLOCK_START_REGEX)
+                ) {
+                    replacementText += "\n";
+                }
+            }
+        }
 
         let newText = MultiLineTextFinder.findAndReplace(noteText, originalText, replacementText);
         if (newText) {

@@ -18,6 +18,10 @@ export const OBSIDIAN_TAG_AT_STARTOFLINE_REGEX = /^#[^\s#]+/gi;
 export const OBSIDIAN_BLOCK_ID_ENDOFLINE_REGEX = / (\^[a-zA-Z0-9-]+)$/;
 export const SR_DATA_ID_TAG = "^sr-data-id-";
 export const SR_METADATA_CALLOUT = "> [!sr|card-metadata]";
+// Matches markdown block structures that break out of blockquotes without lazy continuation
+// (e.g. lists, blockquotes, headings, code fences, thematic breaks, or HTML comments)
+export const MARKDOWN_BLOCK_START_REGEX =
+    /^(\s*[-*+]|\s*\d+[.)]|\s*>|\s*#|\s*```|\s*~~~|\s*---|<!--)/;
 
 export const PREFERRED_DATE_FORMAT = "YYYY-MM-DD";
 export const ALLOWED_DATE_FORMATS = [PREFERRED_DATE_FORMAT, "DD-MM-YYYY", "ddd MMM DD YYYY"];
