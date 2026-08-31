@@ -55,12 +55,21 @@ export function createSRCommentHiderExtension(isEnabled: () => boolean) {
                     const start = from + match.index;
                     const end = start + match[0].length;
 
-                    // Reveal comment if user cursor or selection intersects this range
-                    const overlapsCursor = selection.ranges.some(
-                        (range) => range.from <= end && range.to >= start,
+                    // Check if the cursor or selection is on the same line
+                    const line = view.state.doc.lineAt(start);
+                    const isLineActive = selection.ranges.some(
+                        (range) => range.from <= line.to && range.to >= line.from,
                     );
 
-                    if (!overlapsCursor) {
+                    if (isLineActive) {
+                        builder.add(
+                            start,
+                            end,
+                            Decoration.mark({
+                                class: "sr-comment-faint",
+                            }),
+                        );
+                    } else {
                         builder.add(
                             start,
                             end,

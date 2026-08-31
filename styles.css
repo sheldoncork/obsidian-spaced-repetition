@@ -9,6 +9,12 @@
     display: none;
   }
 }
+.sr-comment-faint {
+  opacity: 0.35;
+  font-size: 0.85em;
+  color: var(--text-faint);
+  user-select: text;
+}
 .sr-bg-blue,
 .sr-bg-yellow,
 .sr-bg-green,
