@@ -1,6 +1,6 @@
 {
     "name": "obsidian-spaced-repetition",
-    "version": "1.15.4-dirty",
+    "version": "1.15.4",
     "description": "Fight the forgetting curve by reviewing flashcards & entire notes.",
     "main": "main.js",
     "scripts": {
@@ -67,7 +67,7 @@
         "precommit-msg",
         "validate"
     ],
-    "packageManager": "pnpm@11.24.0",
+    "packageManager": "pnpm@11.6.0",
     "engines": {
         "pnpm": ">=11.6.0"
     },
