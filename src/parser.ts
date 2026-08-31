@@ -157,10 +157,13 @@ export function parse(text: string, options: ParserOptions): ParsedQuestionInfo[
             firstLineNo = i;
 
             // Pick up scheduling information if present
-            if (i + 1 < lines.length && lines[i + 1].startsWith("<!--SR:")) {
+            if (i + 1 < lines.length && lines[i + 1].trimStart().startsWith("<!--SR:")) {
                 cardText += "\n" + lines[i + 1];
                 i++;
-            } else if (i + 1 < lines.length && lines[i + 1].startsWith(SR_METADATA_CALLOUT)) {
+            } else if (
+                i + 1 < lines.length &&
+                lines[i + 1].trimStart().startsWith(SR_METADATA_CALLOUT)
+            ) {
                 for (let j = i + 1; j < lines.length; j++) {
                     cardText += "\n" + lines[j];
                     i++;

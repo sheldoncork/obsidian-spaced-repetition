@@ -5,9 +5,15 @@
     display: flex;
 } */
 
+.cm-embed-block:has([data-callout="sr"][data-callout-metadata="card-metadata"]),
+.callout[data-callout="sr"][data-callout-metadata="card-metadata"],
 [data-callout="sr"][data-callout-metadata="card-metadata"] {
-    display: inline-block;
-    background-color: transparent;
+    display: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
 
     & > .callout-title {
         display: none;

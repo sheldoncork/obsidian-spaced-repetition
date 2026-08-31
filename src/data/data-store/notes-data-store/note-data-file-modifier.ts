@@ -32,9 +32,19 @@ export class NoteDataFileModifier implements IFileModifier {
             let index = 0;
 
             for (const match of matches) {
-                if (!match[0].startsWith("> <!--SR:")) {
-                    const srComment = match[0];
-                    const newText = `${match.index !== 0 && data[match.index - 1] === "\n" ? "" : "\n"}${SR_METADATA_CALLOUT}\n> ${srComment}`;
+                if (!match[0].trimStart().startsWith(">") && !match[0].includes(SR_METADATA_CALLOUT)) {
+                    const commentIdx = match[0].indexOf("<!--SR:");
+                    const lineBeforeComment = match[0].substring(0, commentIdx).trimEnd();
+                    const commentStr = match[0].substring(commentIdx).trim();
+                    const indent = match[0].match(/^[ \t]*/)?.[0] ?? "";
+
+                    let newText: string;
+                    if (lineBeforeComment.length > 0) {
+                        newText = `${lineBeforeComment}\n${indent}${SR_METADATA_CALLOUT}\n${indent}> ${commentStr}`;
+                    } else {
+                        const needsLeadingNewline = match.index !== 0 && data[match.index - 1] !== "\n";
+                        newText = `${needsLeadingNewline ? "\n" : ""}${indent}${SR_METADATA_CALLOUT}\n${indent}> ${commentStr}`;
+                    }
 
                     if (match.index > index) {
                         newData += data.substring(index, match.index);
@@ -42,7 +52,7 @@ export class NoteDataFileModifier implements IFileModifier {
 
                     newData += newText;
 
-                    index = match.index + srComment.length;
+                    index = match.index + match[0].length;
                 }
             }
 

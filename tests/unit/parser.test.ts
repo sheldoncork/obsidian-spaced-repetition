@@ -54,6 +54,32 @@ test("Test parsing of single line basic cards", () => {
             2,
         ],
     ]);
+    expect(
+        parseT(
+            "\t1. Connectionless :: async delivery\n\t> [!sr|card-metadata] \n\t> <!--SR:!2026-09-02,3,250-->",
+            parserOptions,
+        ),
+    ).toEqual([
+        [
+            CardType.SingleLineBasic,
+            "\t1. Connectionless :: async delivery\n\t> [!sr|card-metadata] \n\t> <!--SR:!2026-09-02,3,250-->",
+            0,
+            2,
+        ],
+    ]);
+    expect(
+        parseT(
+            "\t1. Connectionless :: async delivery\n\t<!--SR:!2026-09-02,3,250-->",
+            parserOptions,
+        ),
+    ).toEqual([
+        [
+            CardType.SingleLineBasic,
+            "\t1. Connectionless :: async delivery\n\t<!--SR:!2026-09-02,3,250-->",
+            0,
+            1,
+        ],
+    ]);
     expect(parseT("Some text before\nQuestion ::Answer", parserOptions)).toEqual([
         [CardType.SingleLineBasic, "Question ::Answer", 1, 1],
     ]);

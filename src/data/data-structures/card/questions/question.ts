@@ -244,7 +244,9 @@ export class Question {
 
                 // Add the callout if the schedule is not in the metadata callout
                 if (settings.useCalloutsForSchedulingComments && !isScheduleInSRMetadataCallout) {
-                    result += `${result.endsWith("\n") ? "" : "\n"}${SR_METADATA_CALLOUT} \n> `;
+                    const indentMatch = result.match(/^[ \t]*/);
+                    const indent = indentMatch ? indentMatch[0] : "";
+                    result += `${result.endsWith("\n") ? "" : "\n"}${indent}${SR_METADATA_CALLOUT} \n${indent}> `;
                 }
 
                 if (blockId) {

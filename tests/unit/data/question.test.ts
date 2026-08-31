@@ -67,6 +67,38 @@ describe("Question", () => {
             ).toBe("Q1::A1\n> [!sr|card-metadata] \n>  <!--SR:!2023-09-06,1,250-->");
         });
 
+        test("preserves indentation on metadata callout for indented questions in lists", () => {
+            const indent = "\t";
+            const questionText = new QuestionText(
+                `${indent}1. Connectionless :: async delivery`,
+                null,
+                `${indent}1. Connectionless :: async delivery`,
+                TextDirection.Ltr,
+                "",
+            );
+            const question = new Question({
+                questionText,
+                cards: [
+                    new Card({
+                        scheduleInfo: RepItemScheduleInfoOsr.fromDueDateStr("2026-09-02", 3, 250),
+                    }),
+                ],
+            });
+
+            DataStoreAlgorithm.instance = {
+                questionFormatScheduleAsHtmlComment: jest.fn(() => "<!--SR:!2026-09-02,3,250-->"),
+            };
+
+            expect(
+                question.formatForNote({
+                    ...DEFAULT_SETTINGS,
+                    useCalloutsForSchedulingComments: true,
+                }),
+            ).toBe(
+                `${indent}1. Connectionless :: async delivery\n${indent}> [!sr|card-metadata] \n${indent}>  <!--SR:!2026-09-02,3,250-->`,
+            );
+        });
+
         test("puts schedule and block id on the same line when enabled", () => {
             const questionText = new QuestionText(
                 "Q1::A1 ^abc123",
