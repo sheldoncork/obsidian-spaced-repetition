@@ -32,7 +32,10 @@ export class NoteDataFileModifier implements IFileModifier {
             let index = 0;
 
             for (const match of matches) {
-                if (!match[0].trimStart().startsWith(">") && !match[0].includes(SR_METADATA_CALLOUT)) {
+                if (
+                    !match[0].trimStart().startsWith(">") &&
+                    !match[0].includes(SR_METADATA_CALLOUT)
+                ) {
                     const commentIdx = match[0].indexOf("<!--SR:");
                     const lineBeforeComment = match[0].substring(0, commentIdx).trimEnd();
                     const commentStr = match[0].substring(commentIdx).trim();
@@ -42,7 +45,8 @@ export class NoteDataFileModifier implements IFileModifier {
                     if (lineBeforeComment.length > 0) {
                         newText = `${lineBeforeComment}\n${indent}${SR_METADATA_CALLOUT}\n${indent}> ${commentStr}`;
                     } else {
-                        const needsLeadingNewline = match.index !== 0 && data[match.index - 1] !== "\n";
+                        const needsLeadingNewline =
+                            match.index !== 0 && data[match.index - 1] !== "\n";
                         newText = `${needsLeadingNewline ? "\n" : ""}${indent}${SR_METADATA_CALLOUT}\n${indent}> ${commentStr}`;
                     }
 
