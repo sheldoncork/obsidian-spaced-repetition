@@ -53,7 +53,7 @@ export function createSRCommentHiderExtension(isEnabled: () => boolean) {
 
                 while ((match = regex.exec(text)) !== null) {
                     const previousChar = text[match.index - 1];
-                    let leadingSpace = previousChar === " " || previousChar === "\t" ? 1 : 0;
+                    const leadingSpace = previousChar === " " || previousChar === "\t" ? 1 : 0;
                     // \s is not used here because it would match line breaks
                     const start = from + match.index - leadingSpace;
                     const end = from + match.index + match[0].length;
