@@ -9,7 +9,7 @@ import {
 } from "@codemirror/view";
 import { editorLivePreviewField } from "obsidian";
 
-const SR_COMMENT_WITH_OPTIONAL_LEADING_SPACE = /\s?<!--SR:.+?-->/g;
+import { ALL_SR_COMMENT_FINDER } from "src/data/constants";
 
 export function createSRCommentHiderExtension(isEnabled: () => boolean) {
     class SRCommentHiderPlugin implements PluginValue {
@@ -48,13 +48,15 @@ export function createSRCommentHiderExtension(isEnabled: () => boolean) {
 
             for (const { from, to } of view.visibleRanges) {
                 const text = view.state.sliceDoc(from, to);
-                const regex = new RegExp(SR_COMMENT_WITH_OPTIONAL_LEADING_SPACE.source, "g");
+                const regex = new RegExp(ALL_SR_COMMENT_FINDER.source, "g");
                 let match: RegExpExecArray | null;
 
                 while ((match = regex.exec(text)) !== null) {
-                    const start = from + match.index;
-                    const end = start + match[0].length;
-
+                    const previousChar = text[match.index - 1];
+                    const leadingSpace = previousChar === " " || previousChar === "\t" ? 1 : 0;
+                    // \s is not used here because it would match line breaks
+                    const start = from + match.index - leadingSpace;
+                    const end = from + match.index + match[0].length;
                     // Check if the cursor or selection is on the same line
                     const line = view.state.doc.lineAt(start);
                     const isLineActive = selection.ranges.some(

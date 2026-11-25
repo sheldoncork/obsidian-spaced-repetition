@@ -16,7 +16,8 @@
         "lib": ["dom", "dom.Iterable", "scripthost", "ES5", "ES6", "ES7", "ES2021"],
         "jsx": "react",
         "jsxFactory": "h",
-        "noEmit": true
+        "noEmit": true,
+        "strictNullChecks": false
     },
     "include": ["src/**/*", "tests/**/*"],
     "exclude": ["build", "coverage", "node_modules"],
