@@ -151,4 +151,10 @@ export default tseslint.config(
             "@typescript-eslint/no-require-imports": "off",
         },
     },
+    {
+        files: ["tests/**/__mocks__/**"],
+        rules: {
+            "unicorn/filename-case": "off",
+        },
+    },
 );
